@@ -1,6 +1,7 @@
 .firebaserc
 public/index.html
 .DS_Store
+/build/
 
 # Logs
 logs
