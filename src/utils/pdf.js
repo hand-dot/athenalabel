@@ -13,7 +13,7 @@ window.onload = () => {
 export default {
   async getBlob(datas, image, positionData) {
     // fontの読み込みが終わるまで待つ
-    if (!window.pdfMake.fonts) {
+    if (!window.pdfMake || !window.pdfMake.fonts) {
       await util.sleep(1000);
       return this.getBlob(datas, image, positionData);
     }

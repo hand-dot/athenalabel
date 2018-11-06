@@ -25,7 +25,7 @@ const Tutorial = (props) => {
   const { handleClose, classes, theme } = props;
   const isMobile = util.isMobile();
   return (
-    <Grid container justify="space-between">
+    <Grid container justify="space-evenly">
       {!isMobile && (
       <Grid item xs={12} style={{ display: 'flex' }}>
         <IconButton className={classes.closeBtn} onClick={handleClose}>
@@ -43,7 +43,7 @@ const Tutorial = (props) => {
         />
       </Grid>
       <Grid item xs={12}>
-        <Typography variant={isMobile ? 'caption' : 'subtitle1'} style={{ padding: theme.spacing.unit, textAlign: 'center' }}>
+        <Typography variant={isMobile ? 'caption' : 'subtitle1'} style={{ padding: theme.spacing.unit * 2, textAlign: 'center' }}>
           {TITLE}
           は無料ですぐに使える宛名ラベル作成サイトです。
           <br />
@@ -53,8 +53,8 @@ const Tutorial = (props) => {
         </Typography>
         <Divider />
       </Grid>
-      <Grid item xs={12} sm={3} style={{ padding: theme.spacing.unit }}>
-        <Typography variant="subtitle1" gutterBottom>
+      <Grid item xs={12} sm={3} style={{ padding: theme.spacing.unit * 2 }}>
+        <Typography style={{borderBottom:'1px solid #f4364c'}} variant="subtitle1" gutterBottom>
           <span role="img" aria-label="使い方はとっても簡単">
               ✌
           </span>
@@ -96,8 +96,8 @@ const Tutorial = (props) => {
           <Divider />
         </Grid>
       </Hidden>
-      <Grid item xs={12} sm={3} style={{ padding: theme.spacing.unit }}>
-        <Typography variant="subtitle1" gutterBottom>
+      <Grid item xs={12} sm={3} style={{ padding: theme.spacing.unit * 2 }}>
+        <Typography style={{borderBottom:'1px solid #f4364c'}} variant="subtitle1" gutterBottom>
           <span role="img" aria-label="ポリシー">
               👍
           </span>
@@ -125,8 +125,8 @@ const Tutorial = (props) => {
         </div>
       </Grid>
       <Hidden xsDown>
-        <Grid item xs={12} sm={3} style={{ padding: theme.spacing.unit }}>
-          <Typography variant="subtitle1" gutterBottom>
+        <Grid item xs={12} sm={3} style={{ padding: theme.spacing.unit * 2 }}>
+          <Typography style={{borderBottom:'1px solid #f4364c'}} variant="subtitle1" gutterBottom>
             <span role="img" aria-label="ポリシー">
               👋
             </span>
@@ -157,8 +157,8 @@ const Tutorial = (props) => {
         </Grid>
       </Hidden>
       <Hidden xsDown>
-        <Grid item xs={12} sm={3} style={{ padding: theme.spacing.unit }}>
-          <Typography variant="subtitle1" gutterBottom>
+        <Grid item xs={12} sm={3} style={{ padding: theme.spacing.unit * 2 }}>
+          <Typography style={{borderBottom:'1px solid #f4364c'}} variant="subtitle1" gutterBottom>
             <span role="img" aria-label="ポリシー">
               🙏
             </span>
@@ -219,6 +219,7 @@ const Tutorial = (props) => {
         item
         xs={12}
         style={{
+          marginTop: '1rem',
           paddingBottom: '1rem',
           paddingTop: '1rem',
           textAlign: 'center',
