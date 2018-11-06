@@ -33,10 +33,10 @@ class Header extends Component {
         <Toolbar>
           <div className={classes.grow}>
             <img src={logo} width={30} height={30} style={{ marginRight: theme.spacing.unit }} alt="logo" />
-            <Typography variant={isMobile ? 'subtitle1' : 'headline'} color="inherit" style={{ marginRight: theme.spacing.unit }}>
+            <Typography variant={isMobile ? 'subtitle1' : 'headline' } color="inherit" style={{ marginRight: theme.spacing.unit, fontWeight : 600 }}>
               {TITLE}
             </Typography>
-            <Typography style={{ display: isMobile ? 'none' : 'flex' }} variant="caption" color="inherit">
+            <Typography style={{ display: isMobile ? 'none' : 'flex'}} variant="caption" color="inherit">
               無料ですぐに使える宛名ラベル作成サイト
             </Typography>
           </div>
