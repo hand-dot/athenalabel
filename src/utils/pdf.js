@@ -4,8 +4,8 @@ const dummyImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAA
 
 window.onload = () => {
   window.pdfMake.fonts = {
-    GenShin: {
-      normal: 'GenShinGothic-Normal-Sub.ttf',
+    NotoSansCJKjp: {
+      normal: 'NotoSansCJKjp-Regular.ttf',
     },
   };
 };
@@ -19,7 +19,7 @@ export default {
     }
     const docDefinition = {
       pageSize: 'A4',
-      defaultStyle: { font: 'GenShin' },
+      defaultStyle: { font: 'NotoSansCJKjp' },
       content: [],
     };
     if (!Array.isArray(datas) || datas.length === 0) {
