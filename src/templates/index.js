@@ -1,18 +1,18 @@
 import レターパック from './datas/レターパック.json';
 import 宛名8面 from './datas/宛名8面.json';
-import 出品者向けラベル24面 from './datas/出品者向けラベル24面.json';
+import 装飾なしラベル24面 from './datas/装飾なしラベル24面.json';
 import スマートレター from './datas/スマートレター.json';
-import ストライプ24面 from './datas/ストライプ24面.json';
-import フレーム24面 from './datas/フレーム24面.json';
-import ライン24面 from './datas/ライン24面.json';
+import ストライプラベル24面 from './datas/ストライプラベル24面.json';
+import フレームラベル24面 from './datas/フレームラベル24面.json';
+import ラインラベル24面 from './datas/ラインラベル24面.json';
 
 
 export default {
   宛名8面,
-  出品者向けラベル24面,
-  ライン24面,
-  フレーム24面,
-  ストライプ24面,
+  装飾なしラベル24面,
+  ラインラベル24面,
+  フレームラベル24面,
+  ストライプラベル24面,
   レターパック,
   スマートレター,
 };
