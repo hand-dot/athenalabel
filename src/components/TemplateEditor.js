@@ -22,6 +22,16 @@ const hotColumns = [
     data: 'y(mm)', title: 'y(mm)', width: 80, type: 'numeric',
   },
   {
+    data: 'width(mm)', title: 'width(mm)', width: 80, type: 'numeric',
+  },
+  {
+    data: 'alignment',
+     title: 'alignment',
+     width: 80,
+     type: 'dropdown',
+     source: ['left', 'center', 'right']
+  },
+  {
     data: 'size(pt)', title: 'size(pt)', width: 80, type: 'numeric',
   },
   {
@@ -34,7 +44,15 @@ const hotColumns = [
 ];
 
 const dataSchema = {
-  Column: '', 'x(mm)': 0, 'y(mm)': 0, 'size(pt)': 18, 'space(pt)': 0, 'line-height(em)': 1, SampleData: '',
+  Column: '',
+  'x(mm)': 0,
+  'y(mm)': 0,
+  'width(mm)': 0,
+  'alignment': 'left',
+  'size(pt)': 18,
+  'space(pt)': 0,
+  'line-height(em)': 1,
+  SampleData: '',
 };
 
 const downloadTemplate = (templateName) => {
@@ -77,6 +95,8 @@ const formatTemplate2State = ({
       Column: key,
       'x(mm)': position[key].position.x,
       'y(mm)': position[key].position.y,
+      'width(mm)': position[key].width,
+      'alignment': position[key].alignment,
       'size(pt)': position[key].size,
       'space(pt)': position[key].space,
       'line-height(em)': position[key].lineHeight,
@@ -94,6 +114,8 @@ const refleshPdf = debounce((datas, image) => {
     pdfData[0][data.Column] = data.SampleData;
     positionData[data.Column] = {
       position: { x: +data['x(mm)'], y: +data['y(mm)'] },
+      width: +data['width(mm)'],
+      alignment: data['alignment'],
       size: +data['size(pt)'],
       space: +data['space(pt)'],
       lineHeight: +data['line-height(em)'],

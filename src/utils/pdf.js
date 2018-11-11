@@ -39,14 +39,18 @@ export default {
         Object.keys(positionData).forEach((key) => {
           const labelData = positionData[key];
           const textObj = {
-            text: util.zenkaku2hankaku(data[key]),
             absolutePosition: {
               x: util.mm2pt(labelData.position.x),
               y: util.mm2pt(labelData.position.y),
             },
+            alignment: labelData.alignment,
+            columns: [{
+                text: util.zenkaku2hankaku(data[key]),
+                width: util.mm2pt(labelData.width),
+              }],
             fontSize: labelData.size,
-            characterSpacing: 'space' in labelData ? labelData.space : undefined,
-            lineHeight: 'lineHeight' in labelData ? labelData.lineHeight : undefined,
+            characterSpacing: labelData.space,
+            lineHeight: labelData.lineHeight,
           };
           docDefinition.content.push(textObj);
         });

@@ -13,7 +13,7 @@ class App extends Component {
     super(props);
     this.hotInstance = null;
     this.state = {
-      isTemplateEditor: false, // テンプレート開発者用。現段階では非公開
+      isTemplateEditor: true, // テンプレート開発者用。現段階では非公開
     };
   }
 
