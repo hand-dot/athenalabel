@@ -26,7 +26,7 @@ export default {
       docDefinition.content.push({
         image: image || dummyImage,
         absolutePosition: { x: 0, y: 0 },
-        width: 594.35,
+        width: 595,
       });
     } else {
       datas.forEach((data, index) => {
@@ -47,10 +47,10 @@ export default {
             columns: [{
                 text: util.zenkaku2hankaku(data[key]),
                 width: util.mm2pt(labelData.width),
+                fontSize: labelData.size,
+                characterSpacing: labelData.space,
+                lineHeight: labelData.lineHeight,
               }],
-            fontSize: labelData.size,
-            characterSpacing: labelData.space,
-            lineHeight: labelData.lineHeight,
           };
           docDefinition.content.push(textObj);
         });
