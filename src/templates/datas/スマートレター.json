@@ -13,6 +13,8 @@
                 "x": 97.5,
                 "y": 42
             },
+            "width": 75,
+            "alignment": "left",
             "size": 30,
             "space": 14.6,
             "lineHeight": 1
@@ -22,15 +24,19 @@
                 "x": 79,
                 "y": 95.5
             },
+            "width": 90,
+            "alignment": "left",
             "size": 15,
             "space": 0,
             "lineHeight": 1.1
         },
         "[To]お名前": {
             "position": {
-                "x": 87,
-                "y": 124.5
+                "x": 79,
+                "y": 124.2
             },
+            "width": 78,
+            "alignment": "right",
             "size": 20,
             "space": 0,
             "lineHeight": 1.1
@@ -40,6 +46,8 @@
                 "x": 103.9,
                 "y": 216.5
             },
+            "width": 26,
+            "alignment": "left",
             "size": 11,
             "space": 4.5,
             "lineHeight": 1
@@ -49,16 +57,20 @@
                 "x": 92,
                 "y": 222.4
             },
+            "width": 77,
+            "alignment": "left",
             "size": 11,
             "space": 0,
             "lineHeight": 1.1
         },
         "[From]お名前": {
             "position": {
-                "x": 99,
-                "y": 246.5
+                "x": 90,
+                "y": 246.7
             },
-            "size": 14,
+            "width": 70,
+            "alignment": "right",
+            "size": 16,
             "space": 0,
             "lineHeight": 1
         }
@@ -90,6 +102,5 @@
         "[From]郵便番号": null,
         "[From]おところ": null,
         "[From]お名前": null
-    },
-    "templateName": "スマートレター"
+    }
 }

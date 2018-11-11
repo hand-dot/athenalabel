@@ -26,7 +26,7 @@ export default {
       docDefinition.content.push({
         image: image || dummyImage,
         absolutePosition: { x: 0, y: 0 },
-        width: 594.35,
+        width: 595,
       });
     } else {
       datas.forEach((data, index) => {
@@ -39,14 +39,18 @@ export default {
         Object.keys(positionData).forEach((key) => {
           const labelData = positionData[key];
           const textObj = {
-            text: util.zenkaku2hankaku(data[key]),
             absolutePosition: {
               x: util.mm2pt(labelData.position.x),
               y: util.mm2pt(labelData.position.y),
             },
-            fontSize: labelData.size,
-            characterSpacing: 'space' in labelData ? labelData.space : undefined,
-            lineHeight: 'lineHeight' in labelData ? labelData.lineHeight : undefined,
+            alignment: labelData.alignment,
+            columns: [{
+                text: util.zenkaku2hankaku(data[key]),
+                width: util.mm2pt(labelData.width),
+                fontSize: labelData.size,
+                characterSpacing: labelData.space,
+                lineHeight: labelData.lineHeight,
+              }],
           };
           docDefinition.content.push(textObj);
         });

@@ -16,6 +16,8 @@
                 "x": 102.3,
                 "y": 39
             },
+            "width": 85,
+            "alignment": "left",
             "size": 40,
             "space": 12.7,
             "lineHeight": 1
@@ -25,24 +27,30 @@
                 "x": 60.6,
                 "y": 88.1
             },
+            "width": 120,
+            "alignment": "left",
             "size": 13,
             "space": 0,
             "lineHeight": 1
         },
         "[To]お名前": {
             "position": {
-                "x": 60.6,
-                "y": 123.8
+                "x": 73,
+                "y": 122.9
             },
+            "width": 113,
+            "alignment": "left",
             "size": 18,
             "space": 0,
             "lineHeight": 1
         },
         "[To]電話番号": {
             "position": {
-                "x": 90.6,
+                "x": 91,
                 "y": 134
             },
+            "width": 95,
+            "alignment": "left",
             "size": 21,
             "space": 0,
             "lineHeight": 1
@@ -52,6 +60,8 @@
                 "x": 77.9,
                 "y": 145.3
             },
+            "width": 85,
+            "alignment": "left",
             "size": 18,
             "space": 5.8,
             "lineHeight": 1
@@ -61,24 +71,30 @@
                 "x": 60.6,
                 "y": 152.7
             },
-            "size": 11,
+            "width": 120,
+            "alignment": "left",
+            "size": 13,
             "space": 0,
             "lineHeight": 1
         },
         "[From]お名前": {
             "position": {
-                "x": 60.6,
-                "y": 180.9
+                "x": 73,
+                "y": 177
             },
-            "size": 12,
+            "width": 113,
+            "alignment": "left",
+            "size": 18,
             "space": 0,
             "lineHeight": 1
         },
         "[From]電話番号": {
             "position": {
-                "x": 90.6,
+                "x": 91,
                 "y": 188
             },
+            "width": 95,
+            "alignment": "left",
             "size": 21,
             "space": 0,
             "lineHeight": 1
@@ -88,6 +104,8 @@
                 "x": 27.8,
                 "y": 215.9
             },
+            "width": 115,
+            "alignment": "left",
             "size": 18,
             "space": 0,
             "lineHeight": 1
