@@ -42,6 +42,13 @@ const downloadPdf = (blob) => {
     window.open(window.URL.createObjectURL(blob));
   }
 };
+
+const getRowHeader = (index, labelLengthInPage) => {
+  // eslint-disable-next-line radix
+  const set = parseInt((index / labelLengthInPage));
+  return `${set + 1}-${index + 1 - (labelLengthInPage * set)}`;
+};
+
 const styles = {
   flexItem: {
     display: 'flex',
@@ -71,14 +78,16 @@ class LabelEditor extends Component {
   }
 
   componentDidMount() {
-    const template = getTemplate(this.state.selectedTemplate); // eslint-disable-line
+    const { selectedTemplate } = this.state;
+    const template = getTemplate(selectedTemplate);
     if (!this.hotDom) return;
+    const labelLengthInPage = templateUtil.getLabelLengthInPage(templates[selectedTemplate]);
     this.hotInstance = Handsontable(this.hotDom, {
       height:
         window.innerHeight
         - (this.hotDom ? this.hotDom.getBoundingClientRect().top : 0),
       width: window.innerWidth / 2 + windowSeparatorRatio - 1,
-      rowHeaders: true,
+      rowHeaders: index => getRowHeader(index, labelLengthInPage),
       manualColumnMove: true,
       allowInsertRow: false,
       stretchH: 'all',
@@ -152,7 +161,9 @@ class LabelEditor extends Component {
       return;
     }
     const template = getTemplate(e.target.value);
+    const labelLengthInPage = templateUtil.getLabelLengthInPage(templates[e.target.value]);
     this.hotInstance.updateSettings({
+      rowHeaders: index => getRowHeader(index, labelLengthInPage),
       columns: template.columns,
       dataSchema: template.dataSchema,
       data: [],
