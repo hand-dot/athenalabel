@@ -12,7 +12,10 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import NativeSelect from '@material-ui/core/NativeSelect';
+import Tooltip from '@material-ui/core/Tooltip';
 import '../styles/handsontable-custom.css';
 import '../styles/animation.css';
 import templates from '../templates';
@@ -24,7 +27,9 @@ import Tutorial from './Tutorial';
 const PDF_REFLESH_DEBOUNCE = 100;
 const WINDOW_RESIZE_DEBOUNCE = 500;
 const windowSeparatorRatio = window.innerWidth * 0.2;
-const emptyIframe = URL.createObjectURL(new Blob(['<div>Loading...</div>'], { type: 'text/html' }));
+const emptyIframe = URL.createObjectURL(
+  new Blob(['<div>Loading...</div>'], { type: 'text/html' }),
+);
 const isIe = util.isIe();
 
 const getTemplate = selectedTemplate => templateUtil.fmtTemplate(templates[selectedTemplate]);
@@ -43,7 +48,14 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
   },
+  select: {
+    minWidth: 200,
+  },
 };
+
+const InnerHtml = props => (
+  <div dangerouslySetInnerHTML={{ __html: props.html }} /> // eslint-disable-line
+);
 
 class LabelEditor extends Component {
   constructor(props) {
@@ -62,9 +74,10 @@ class LabelEditor extends Component {
     const template = getTemplate(this.state.selectedTemplate); // eslint-disable-line
     if (!this.hotDom) return;
     this.hotInstance = Handsontable(this.hotDom, {
-      height: window.innerHeight
-       - (this.hotDom ? this.hotDom.getBoundingClientRect().top : 0),
-      width: (window.innerWidth / 2) + windowSeparatorRatio - 1,
+      height:
+        window.innerHeight
+        - (this.hotDom ? this.hotDom.getBoundingClientRect().top : 0),
+      width: window.innerWidth / 2 + windowSeparatorRatio - 1,
       rowHeaders: true,
       manualColumnMove: true,
       allowInsertRow: false,
@@ -78,7 +91,7 @@ class LabelEditor extends Component {
           return;
         }
         const needReflech = changes.some((change) => {
-          const [,, oldVal, newVal] = change;
+          const [, , oldVal, newVal] = change;
           return oldVal !== newVal;
         });
         if (needReflech) this.refleshPdf();
@@ -91,7 +104,10 @@ class LabelEditor extends Component {
     window.onbeforeunload = (e) => {
       if (!this.hotInstance) return null;
       const datas = util.getNotEmptyRowData(this.hotInstance.getSourceData());
-      const isSampleData = isEqual(datas, getTemplate(this.state.selectedTemplate).sampledata); // eslint-disable-line
+      const isSampleData = isEqual(
+        datas,
+        getTemplate(this.state.selectedTemplate).sampledata // eslint-disable-line
+      );
       if (datas.length !== 0 && !isSampleData) {
         const dialogText = 'ページを離れてもよろしいですか？';
         e.returnValue = dialogText;
@@ -103,12 +119,15 @@ class LabelEditor extends Component {
     window.onresize = debounce(() => {
       if (!this.iframe || !this.hotInstance) return;
       this.hotInstance.updateSettings({
-        height: window.innerHeight
-        - (this.hotDom ? this.hotDom.getBoundingClientRect().top : 0),
-        width: (window.innerWidth / 2) + windowSeparatorRatio - 1,
+        height:
+          window.innerHeight
+          - (this.hotDom ? this.hotDom.getBoundingClientRect().top : 0),
+        width: window.innerWidth / 2 + windowSeparatorRatio - 1,
       });
-      this.iframe.style.height = `${window.innerHeight - (this.iframe ? this.iframe.getBoundingClientRect().top + 5 : 0)}px`;
-      this.iframe.style.width = `${(window.innerWidth / 2) - windowSeparatorRatio}px`;
+      this.iframe.style.height = `${window.innerHeight
+        - (this.iframe ? this.iframe.getBoundingClientRect().top + 5 : 0)}px`;
+      this.iframe.style.width = `${window.innerWidth / 2
+        - windowSeparatorRatio}px`;
     }, WINDOW_RESIZE_DEBOUNCE);
   }
 
@@ -121,8 +140,17 @@ class LabelEditor extends Component {
     if (!this.hotInstance) return;
     const datas = util.getNotEmptyRowData(this.hotInstance.getSourceData());
     const { selectedTemplate } = this.state;
-    const isSampleData = isEqual(datas, getTemplate(selectedTemplate).sampledata);
-    if (datas.length !== 0 && !isSampleData && !window.confirm('データを変更されていますがテンプレートを変更しますか？')) return;
+    const isSampleData = isEqual(
+      datas,
+      getTemplate(selectedTemplate).sampledata,
+    );
+    if (
+      datas.length !== 0
+      && !isSampleData
+      && !window.confirm('データを変更されていますがテンプレートを変更しますか？')
+    ) {
+      return;
+    }
     const template = getTemplate(e.target.value);
     this.hotInstance.updateSettings({
       columns: template.columns,
@@ -137,15 +165,27 @@ class LabelEditor extends Component {
   handleChangePage(e) {
     const { selectedTemplate, page } = this.state;
     if (!this.hotInstance) return;
-    const amount = templateUtil.getLabelLengthInPage(templates[selectedTemplate]) * e.target.value;
+    const amount = templateUtil.getLabelLengthInPage(templates[selectedTemplate])
+      * e.target.value;
     const rowCount = this.hotInstance.getSourceData().length;
     const isRemove = rowCount > amount;
-    const arg = isRemove ? ['remove_row', amount, rowCount - amount] : ['insert_row', rowCount, amount - rowCount];
+    const arg = isRemove
+      ? ['remove_row', amount, rowCount - amount]
+      : ['insert_row', rowCount, amount - rowCount];
     const [, begin, end] = arg;
     if (isRemove) {
-      const removeData = this.hotInstance.getSourceData().slice(begin, begin + end);
+      const removeData = this.hotInstance
+        .getSourceData()
+        .slice(begin, begin + end);
       const removeDataHasInput = util.getNotEmptyRowData(removeData).length !== 0;
-      if (removeDataHasInput && !window.confirm(`ページを${page}枚から${e.target.value}枚へ減らすと編集したデータが消えますがよろしいですか？`)) {
+      if (
+        removeDataHasInput
+        && !window.confirm(
+          `ページを${page}枚から${
+            e.target.value
+          }枚へ減らすと編集したデータが消えますがよろしいですか？`,
+        )
+      ) {
         return;
       }
     }
@@ -155,7 +195,7 @@ class LabelEditor extends Component {
   }
 
   async refleshPdf() {
-    this.pdfBlob = null; 
+    this.pdfBlob = null;
     const { selectedTemplate } = this.state;
     const template = getTemplate(selectedTemplate);
     this.pdfBlob = await pdfUtil.getBlob(
@@ -168,7 +208,9 @@ class LabelEditor extends Component {
 
   loadSampleData() {
     const { selectedTemplate } = this.state;
-    const sampledata = JSON.parse(JSON.stringify(getTemplate(selectedTemplate).sampledata));
+    const sampledata = JSON.parse(
+      JSON.stringify(getTemplate(selectedTemplate).sampledata),
+    );
     this.hotInstance.loadData(sampledata);
     this.refleshPdf();
   }
@@ -179,71 +221,151 @@ class LabelEditor extends Component {
     return (
       <Grid container justify="space-between">
         <Grid item>
-          <div className={classes.flexItem} style={{ padding: 5, justifyContent: 'space-around' }}>
-            <Button variant="outlined" mini onClick={()=>this.setState({ isOpenTutorial: true })}>
+          <div
+            className={classes.flexItem}
+            style={{ padding: 5, justifyContent: 'space-around' }}
+          >
+            <Button
+              variant="outlined"
+              mini
+              onClick={() => this.setState({ isOpenTutorial: true })}
+            >
               使い方を見る
             </Button>
             <Dialog fullScreen open={isOpenTutorial}>
-              <Tutorial handleClose={()=>this.setState({ isOpenTutorial: false })} />
+              <Tutorial
+                handleClose={() => this.setState({ isOpenTutorial: false })}
+              />
             </Dialog>
             <div className={classes.flexItem}>/</div>
             <div className={classes.flexItem}>
               <FormControl margin="none">
-                <InputLabel htmlFor="select-template-helper">テンプレート</InputLabel>
-                <NativeSelect value={selectedTemplate} onChange={this.handleChangeTemplate.bind(this)} input={<Input name="template" id="select-template-helper" />}>
-                  {Object.keys(templates).map(_ => (<option key={_} value={_}>{_}</option>))}
-                </NativeSelect>
+                <InputLabel htmlFor="select-template-helper">
+                  テンプレート
+                </InputLabel>
+                <Select
+                  value={selectedTemplate}
+                  onChange={this.handleChangeTemplate.bind(this)}
+                  classes={{ root: classes.select }}
+                  inputProps={{
+                    name: 'template',
+                    id: 'select-template-helper',
+                  }}
+                >
+                  {Object.keys(templates).map((templateKey) => {
+                    const template = templates[templateKey];
+                    return (
+                      <MenuItem
+                        key={template.name}
+                        value={template.name}
+                        classes={{ root: classes.menuItem }}
+                      >
+                        <Tooltip
+                          interactive
+                          title={<InnerHtml html={template.description} />}
+                          placement="right"
+                        >
+                          <div style={{ width: '100%' }}>{template.name}</div>
+                        </Tooltip>
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
               </FormControl>
-              <Typography variant="subheading" className={classes.flexItem} style={{ margin: '0 20px' }}>x</Typography>
+              <Typography
+                variant="subheading"
+                className={classes.flexItem}
+                style={{ margin: '0 20px' }}
+              >
+                x
+              </Typography>
               <FormControl margin="none">
                 <InputLabel htmlFor="select-page-helper">枚数</InputLabel>
-                <NativeSelect value={page} onChange={this.handleChangePage.bind(this)} input={<Input name="page" id="select-page-helper" />}>
-                  {[...Array(10).keys()].map(i => i + 1)
-                    .map(_ => (<option key={_} value={_}>{_}</option>))}
+                <NativeSelect
+                  value={page}
+                  onChange={this.handleChangePage.bind(this)}
+                  input={<Input name="page" id="select-page-helper" />}
+                >
+                  {[...Array(10).keys()]
+                    .map(i => i + 1)
+                    .map(_ => (
+                      <option key={_} value={_}>
+                        {_}
+                      </option>
+                    ))}
                 </NativeSelect>
               </FormControl>
-              <Typography variant="subheading" className={classes.flexItem} style={{ marginLeft: 20 }}>
+              <Typography
+                variant="subheading"
+                className={classes.flexItem}
+                style={{ marginLeft: 20 }}
+              >
                 =
                 {' '}
-                {templateUtil.getLabelLengthInPage(templates[selectedTemplate]) * page}
+                {templateUtil.getLabelLengthInPage(
+                  templates[selectedTemplate],
+                ) * page}
                 セット
               </Typography>
             </div>
             <div className={classes.flexItem}>/</div>
-            <Button variant="outlined" mini onClick={() => { downloadPdf(this.pdfBlob); }}>作成</Button>
+            <Button
+              variant="outlined"
+              mini
+              onClick={() => {
+                downloadPdf(this.pdfBlob);
+              }}
+            >
+              作成
+            </Button>
           </div>
-          <div ref={(node) => { this.hotDom = node; }} />
+          <div
+            ref={(node) => {
+              this.hotDom = node;
+            }}
+          />
         </Grid>
         <Grid item>
           {isIe && (
-          <div
-            ref={(node) => { this.iframe = node; }}
-            className={classes.flexItem}
-            style={{
-              position: 'fixed',
-              right: 0,
-              border: '1px solid #ccc',
-              height: window.innerHeight - (this.iframe ? this.iframe.getBoundingClientRect().top + 5 : 0),
-              width: (window.innerWidth / 2) - windowSeparatorRatio,
-            }}
-          >
-            <Typography variant="caption" style={{ textAlign: 'center' }}>
-              Internet Explorerでは
-              <br />
-              リアルタイムPDFプレビューがご利用いただけません。
-              <br />
-              「使い方を見る」から動作環境を確認してください。
-            </Typography>
-          </div>
+            <div
+              ref={(node) => {
+                this.iframe = node;
+              }}
+              className={classes.flexItem}
+              style={{
+                position: 'fixed',
+                right: 0,
+                border: '1px solid #ccc',
+                height:
+                  window.innerHeight
+                  - (this.iframe
+                    ? this.iframe.getBoundingClientRect().top + 5
+                    : 0),
+                width: window.innerWidth / 2 - windowSeparatorRatio,
+              }}
+            >
+              <Typography variant="caption" style={{ textAlign: 'center' }}>
+                Internet Explorerでは
+                <br />
+                リアルタイムPDFプレビューがご利用いただけません。
+                <br />
+                「使い方を見る」から動作環境を確認してください。
+              </Typography>
+            </div>
           )}
           {!isIe && (
-          <iframe
-            style={{ position: 'fixed', right: 0, border: '1px solid #ccc' }}
-            ref={(node) => { this.iframe = node; }}
-            height={`${window.innerHeight - (this.iframe ? this.iframe.getBoundingClientRect().top + 5 : 0)}px`}
-            width={`${(window.innerWidth / 2) - windowSeparatorRatio}px`}
-            title="PDF"
-          />
+            <iframe
+              style={{ position: 'fixed', right: 0, border: '1px solid #ccc' }}
+              ref={(node) => {
+                this.iframe = node;
+              }}
+              height={`${window.innerHeight
+                - (this.iframe
+                  ? this.iframe.getBoundingClientRect().top + 5
+                  : 0)}px`}
+              width={`${window.innerWidth / 2 - windowSeparatorRatio}px`}
+              title="PDF"
+            />
           )}
         </Grid>
       </Grid>
@@ -253,7 +375,7 @@ class LabelEditor extends Component {
 
 LabelEditor.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line
-  theme: PropTypes.object.isRequired, // eslint-disable-line
+  theme: PropTypes.object.isRequired // eslint-disable-line
 };
 
 export default withStyles(styles, { withTheme: true })(LabelEditor);

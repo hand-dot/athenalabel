@@ -45,12 +45,12 @@ export default {
             },
             alignment: labelData.alignment,
             columns: [{
-                text: util.zenkaku2hankaku(data[key]),
-                width: util.mm2pt(labelData.width),
-                fontSize: labelData.size,
-                characterSpacing: labelData.space,
-                lineHeight: labelData.lineHeight,
-              }],
+              text: util.zenkaku2hankaku(data[key]),
+              width: util.mm2pt(labelData.width),
+              fontSize: labelData.size,
+              characterSpacing: labelData.space,
+              lineHeight: labelData.lineHeight,
+            }],
           };
           docDefinition.content.push(textObj);
         });

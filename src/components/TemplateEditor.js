@@ -16,29 +16,47 @@ const template = {};
 const hotColumns = [
   { data: 'Column', title: 'Column' },
   {
-    data: 'x(mm)', title: 'x(mm)', width: 80, type: 'numeric',
+    data: 'x(mm)',
+    title: 'x(mm)',
+    width: 80,
+    type: 'numeric',
   },
   {
-    data: 'y(mm)', title: 'y(mm)', width: 80, type: 'numeric',
+    data: 'y(mm)',
+    title: 'y(mm)',
+    width: 80,
+    type: 'numeric',
   },
   {
-    data: 'width(mm)', title: 'width(mm)', width: 80, type: 'numeric',
+    data: 'width(mm)',
+    title: 'width(mm)',
+    width: 80,
+    type: 'numeric',
   },
   {
     data: 'alignment',
-     title: 'alignment',
-     width: 80,
-     type: 'dropdown',
-     source: ['left', 'center', 'right']
+    title: 'alignment',
+    width: 80,
+    type: 'dropdown',
+    source: ['left', 'center', 'right'],
   },
   {
-    data: 'size(pt)', title: 'size(pt)', width: 80, type: 'numeric',
+    data: 'size(pt)',
+    title: 'size(pt)',
+    width: 80,
+    type: 'numeric',
   },
   {
-    data: 'space(pt)', title: 'space(pt)', width: 80, type: 'numeric',
+    data: 'space(pt)',
+    title: 'space(pt)',
+    width: 80,
+    type: 'numeric',
   },
   {
-    data: 'line-height(em)', title: 'line-height(em)', width: 120, type: 'numeric',
+    data: 'line-height(em)',
+    title: 'line-height(em)',
+    width: 120,
+    type: 'numeric',
   },
   { data: 'SampleData', title: 'SampleData' },
 ];
@@ -48,19 +66,23 @@ const dataSchema = {
   'x(mm)': 0,
   'y(mm)': 0,
   'width(mm)': 0,
-  'alignment': 'left',
+  alignment: 'left',
   'size(pt)': 18,
   'space(pt)': 0,
   'line-height(em)': 1,
   SampleData: '',
 };
 
-const downloadTemplate = (templateName) => {
+const downloadTemplate = (templateName, templateDescription) => {
   if (util.isEmpty(template)) {
     alert('テンプレートを編集してください。');
     return;
   }
-  const blob = new Blob([JSON.stringify(template)], { type: 'application/json' });
+  template.name = templateName;
+  template.description = templateDescription;
+  const blob = new Blob([JSON.stringify(template)], {
+    type: 'application/json',
+  });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
@@ -78,15 +100,22 @@ const setTemplate = (pdfData, image, positionData) => {
   template.sampledata = pdfData;
   template.position = positionData;
   template.image = image;
-  template.columns = Object.keys(pdfData[0]).map(key => ({ data: key, title: key }));
+  template.columns = Object.keys(pdfData[0]).map(key => ({
+    data: key,
+    title: key,
+  }));
   template.dataSchema = Object.keys(pdfData[0]).reduce((obj, key) => {
-    obj[key] = null; // eslint-disable-line 
+    obj[key] = null; // eslint-disable-line
     return obj;
   }, {});
 };
 
 const formatTemplate2State = ({
-  image, columns, sampledata, position,
+  description,
+  image,
+  columns,
+  sampledata,
+  position,
 }) => {
   const datas = [];
   columns.forEach((column) => {
@@ -96,7 +125,7 @@ const formatTemplate2State = ({
       'x(mm)': position[key].position.x,
       'y(mm)': position[key].position.y,
       'width(mm)': position[key].width,
-      'alignment': position[key].alignment,
+      alignment: position[key].alignment,
       'size(pt)': position[key].size,
       'space(pt)': position[key].space,
       'line-height(em)': position[key].lineHeight,
@@ -104,7 +133,7 @@ const formatTemplate2State = ({
     };
     datas.push(data);
   });
-  return { image: image || null, datas };
+  return { description, image: image || null, datas };
 };
 
 const refleshPdf = debounce((datas, image) => {
@@ -115,7 +144,7 @@ const refleshPdf = debounce((datas, image) => {
     positionData[data.Column] = {
       position: { x: +data['x(mm)'], y: +data['y(mm)'] },
       width: +data['width(mm)'],
-      alignment: data['alignment'],
+      alignment: data.alignment,
       size: +data['size(pt)'],
       space: +data['space(pt)'],
       lineHeight: +data['line-height(em)'],
@@ -131,6 +160,7 @@ class TemplateEditor extends Component {
     this.hotInstance = null;
     this.state = {
       templateName: '',
+      templateDescription: '',
       image: null,
     };
   }
@@ -138,48 +168,66 @@ class TemplateEditor extends Component {
   componentDidMount() {
     if (!this.hotDom) return;
     this.hotInstance = Handsontable(this.hotDom, {
-      height: window.innerHeight
-       - (this.hotDom ? this.hotDom.getBoundingClientRect().top : 0),
-      width: (window.innerWidth / 2) + windowSeparatorRatio - 1,
+      height:
+        window.innerHeight
+        - (this.hotDom ? this.hotDom.getBoundingClientRect().top : 0),
+      width: window.innerWidth / 2 + windowSeparatorRatio - 1,
       rowHeaders: true,
       contextMenu: true,
       minRows: 200,
-      colWidths: ((((window.innerWidth / 2) + windowSeparatorRatio)
-      - hotColumns.reduce((num, column) => {
-       num += column.width || 0; // eslint-disable-line 
-        return num;
-      }, 0)) / 2) - 35,
+      colWidths:
+        (window.innerWidth / 2
+          + windowSeparatorRatio
+          - hotColumns.reduce((num, column) => {
+            num += column.width || 0; // eslint-disable-line
+            return num;
+          }, 0))
+          / 2
+        - 35,
       columns: hotColumns,
       dataSchema,
       afterChange: debounce((changes) => {
         if (!changes) return;
         const needReflech = changes.some((change) => {
-          const [,, oldVal, newVal] = change;
+          const [, , oldVal, newVal] = change;
           return oldVal !== newVal;
         });
         if (needReflech) {
           const { image } = this.state;
-          refleshPdf(util.getNotEmptyRowData(this.hotInstance.getSourceData(), dataSchema), image);
+          refleshPdf(
+            util.getNotEmptyRowData(
+              this.hotInstance.getSourceData(),
+              dataSchema,
+            ),
+            image,
+          );
         }
       }, PDF_REFLESH_MS),
     });
-    const blob = new Blob(['<div>左のテンプレートを編集して下さい。</div>'], { type: 'text/html' });
+    const blob = new Blob(['<div>左のテンプレートを編集して下さい。</div>'], {
+      type: 'text/html',
+    });
     this.iframe.src = URL.createObjectURL(blob);
   }
 
   handleChangeTemplateName(e) {
     this.setState({ templateName: e.target.value });
-    template.templateName = e.target.value;
+  }
+
+  handleChangeTemplateDescription(e) {
+    this.setState({ templateDescription: e.target.value });
   }
 
   handleChangeImage(event) {
-     const files = event.target.files; // eslint-disable-line
+    const files = event.target.files; // eslint-disable-line
     const fileReader = new FileReader();
     fileReader.addEventListener('load', (e) => {
       this.setState({ image: e.target.result });
       if (this.hotInstance) {
-        refleshPdf(util.getNotEmptyRowData(this.hotInstance.getSourceData(), dataSchema),
-          e.target.result);
+        refleshPdf(
+          util.getNotEmptyRowData(this.hotInstance.getSourceData(), dataSchema),
+          e.target.result,
+        );
       }
     });
     fileReader.readAsDataURL(files[0]);
@@ -189,11 +237,19 @@ class TemplateEditor extends Component {
     const files = event.target.files; // eslint-disable-line
     const fileReader = new FileReader();
     fileReader.addEventListener('load', (e) => {
-      const { image, datas } = formatTemplate2State(JSON.parse(e.target.result));
+      const { description, image, datas } = formatTemplate2State(
+        JSON.parse(e.target.result),
+      );
       if (this.hotInstance) {
-        this.hotInstance.updateSettings({ data: JSON.parse(JSON.stringify(datas)) });
+        this.hotInstance.updateSettings({
+          data: JSON.parse(JSON.stringify(datas)),
+        });
       }
-      this.setState({ templateName: files[0].name.replace('.json', ''), image });
+      this.setState({
+        templateName: files[0].name.replace('.json', ''),
+        templateDescription: description,
+        image,
+      });
       refleshPdf(datas, image);
     });
     if (files[0]) {
@@ -202,7 +258,7 @@ class TemplateEditor extends Component {
   }
 
   render() {
-    const { templateName } = this.state;
+    const { templateName, templateDescription } = this.state;
     return (
       <Grid container justify="space-between">
         <Grid item xs={6}>
@@ -214,28 +270,73 @@ class TemplateEditor extends Component {
             InputLabelProps={{ shrink: true }}
             variant="outlined"
           />
-          <div style={{
-            padding: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'bottom',
-          }}
+          <TextField
+            fullWidth
+            style={{ margin: 10 }}
+            label="templateDescription"
+            value={templateDescription}
+            onChange={this.handleChangeTemplateDescription.bind(this)}
+            InputLabelProps={{ shrink: true }}
+            variant="outlined"
+          />
+          <div
+            style={{
+              padding: 10,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'bottom',
+            }}
           >
             <label htmlFor="image">
               Image:
-              <input id="image" type="file" accept="image/*" ref={(node) => { this.fileInput = node; }} onChange={this.handleChangeImage.bind(this)} />
+              <input
+                id="image"
+                type="file"
+                accept="image/*"
+                ref={(node) => {
+                  this.fileInput = node;
+                }}
+                onChange={this.handleChangeImage.bind(this)}
+              />
             </label>
             <label htmlFor="importTemplate">
               Load:
-              <input id="importTemplate" type="file" accept="application/json" ref={(node) => { this.fileInput = node; }} onChange={this.handleChangeTemplate.bind(this)} />
+              <input
+                id="importTemplate"
+                type="file"
+                accept="application/json"
+                ref={(node) => {
+                  this.fileInput = node;
+                }}
+                onChange={this.handleChangeTemplate.bind(this)}
+              />
             </label>
-            <button type="button" onClick={(() => { downloadTemplate(templateName); })}>Download</button>
+            <button
+              type="button"
+              onClick={() => {
+                downloadTemplate(templateName, templateDescription);
+              }}
+            >
+              Download
+            </button>
           </div>
-          <div ref={(node) => { this.hotDom = node; }} />
+          <div
+            ref={(node) => {
+              this.hotDom = node;
+            }}
+          />
         </Grid>
         <Grid item xs={6}>
           <iframe
             style={{ position: 'fixed', right: 0, border: '1px solid #ccc' }}
-            ref={(node) => { this.iframe = node; }}
-            height={`${window.innerHeight - (this.iframe ? this.iframe.getBoundingClientRect().top + 5 : 0)}px`}
-            width={`${(window.innerWidth / 2) - windowSeparatorRatio}px`}
+            ref={(node) => {
+              this.iframe = node;
+            }}
+            height={`${window.innerHeight
+              - (this.iframe
+                ? this.iframe.getBoundingClientRect().top + 5
+                : 0)}px`}
+            width={`${window.innerWidth / 2 - windowSeparatorRatio}px`}
             id="pdfIframe"
             title="PDF"
           />

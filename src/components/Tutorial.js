@@ -54,7 +54,7 @@ const Tutorial = (props) => {
         <Divider />
       </Grid>
       <Grid item xs={12} sm={3} style={{ padding: theme.spacing.unit * 2 }}>
-        <Typography style={{borderBottom:'1px solid #f4364c'}} variant="subtitle1" gutterBottom>
+        <Typography style={{ borderBottom: '1px solid #f4364c' }} variant="subtitle1" gutterBottom>
           <span role="img" aria-label="使い方はとっても簡単">
               ✌
           </span>
@@ -97,7 +97,7 @@ const Tutorial = (props) => {
         </Grid>
       </Hidden>
       <Grid item xs={12} sm={3} style={{ padding: theme.spacing.unit * 2 }}>
-        <Typography style={{borderBottom:'1px solid #f4364c'}} variant="subtitle1" gutterBottom>
+        <Typography style={{ borderBottom: '1px solid #f4364c' }} variant="subtitle1" gutterBottom>
           <span role="img" aria-label="ポリシー">
               👍
           </span>
@@ -126,7 +126,7 @@ const Tutorial = (props) => {
       </Grid>
       <Hidden xsDown>
         <Grid item xs={12} sm={3} style={{ padding: theme.spacing.unit * 2 }}>
-          <Typography style={{borderBottom:'1px solid #f4364c'}} variant="subtitle1" gutterBottom>
+          <Typography style={{ borderBottom: '1px solid #f4364c' }} variant="subtitle1" gutterBottom>
             <span role="img" aria-label="ポリシー">
               👋
             </span>
@@ -158,7 +158,7 @@ const Tutorial = (props) => {
       </Hidden>
       <Hidden xsDown>
         <Grid item xs={12} sm={3} style={{ padding: theme.spacing.unit * 2 }}>
-          <Typography style={{borderBottom:'1px solid #f4364c'}} variant="subtitle1" gutterBottom>
+          <Typography style={{ borderBottom: '1px solid #f4364c' }} variant="subtitle1" gutterBottom>
             <span role="img" aria-label="ポリシー">
               🙏
             </span>
