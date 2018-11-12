@@ -154,17 +154,8 @@ class LabelEditor extends Component {
     this.refleshPdf();
   }
 
-  handleOpenTutorial() {
-    this.setState({ isOpenTutorial: true });
-  }
-
-  handleCloseTutorial() {
-    this.setState({ isOpenTutorial: false });
-  }
-
-
   async refleshPdf() {
-    this.pdfBlob = null;
+    this.pdfBlob = null; 
     const { selectedTemplate } = this.state;
     const template = getTemplate(selectedTemplate);
     this.pdfBlob = await pdfUtil.getBlob(
@@ -189,13 +180,11 @@ class LabelEditor extends Component {
       <Grid container justify="space-between">
         <Grid item>
           <div className={classes.flexItem} style={{ padding: 5, justifyContent: 'space-around' }}>
-            <Button variant="outlined" mini onClick={this.handleOpenTutorial.bind(this)}>使い方を見る</Button>
-            <Dialog
-              fullScreen
-              open={isOpenTutorial}
-              onClose={this.handleCloseTutorial.bind(this)}
-            >
-              <Tutorial handleClose={this.handleCloseTutorial.bind(this)} />
+            <Button variant="outlined" mini onClick={()=>this.setState({ isOpenTutorial: true })}>
+              使い方を見る
+            </Button>
+            <Dialog fullScreen open={isOpenTutorial}>
+              <Tutorial handleClose={()=>this.setState({ isOpenTutorial: false })} />
             </Dialog>
             <div className={classes.flexItem}>/</div>
             <div className={classes.flexItem}>
