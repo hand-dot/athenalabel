@@ -8,6 +8,7 @@ import isEqual from 'lodash.isequal';
 import 'handsontable/dist/handsontable.full.min.css';
 import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
+import Badge from '@material-ui/core/Badge';
 import InputLabel from '@material-ui/core/InputLabel';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -58,6 +59,9 @@ const styles = {
   select: {
     minWidth: 200,
   },
+  badge: {
+    top: -5, right: -5, width: 15, height: 15,
+  },
 };
 
 const InnerHtml = props => (
@@ -74,10 +78,15 @@ class LabelEditor extends Component {
       page: 1,
       selectedTemplate: '宛名8面',
       isOpenTutorial: false,
+      haveOpenedTutorial: false,
     };
   }
 
   componentDidMount() {
+    const haveOpenedTutorial = localStorage.getItem('haveOpenedTutorial');
+    if (haveOpenedTutorial === null) {
+      this.setState({ haveOpenedTutorial: true });
+    }
     const { selectedTemplate } = this.state;
     const template = getTemplate(selectedTemplate);
     if (!this.hotDom) return;
@@ -228,7 +237,9 @@ class LabelEditor extends Component {
 
   render() {
     const { classes } = this.props;
-    const { isOpenTutorial, selectedTemplate, page } = this.state;
+    const {
+      isOpenTutorial, haveOpenedTutorial, selectedTemplate, page,
+    } = this.state;
     return (
       <Grid container justify="space-between">
         <Grid item>
@@ -236,13 +247,19 @@ class LabelEditor extends Component {
             className={classes.flexItem}
             style={{ padding: 5, justifyContent: 'space-around' }}
           >
-            <Button
-              variant="outlined"
-              mini
-              onClick={() => this.setState({ isOpenTutorial: true })}
-            >
-              使い方を見る
-            </Button>
+            <Badge color={haveOpenedTutorial ? 'error' : 'default'} badgeContent="" classes={{ badge: classes.badge }}>
+              <Button
+                variant="outlined"
+                mini
+                onClick={() => {
+                  this.setState({ isOpenTutorial: true, haveOpenedTutorial: false });
+                  // 今後のアップデートも考えて一旦package.jsonのversionを入れる(パッチバージョンは入れない)
+                  localStorage.setItem('haveOpenedTutorial', '0.1');
+                }}
+              >
+                使い方を見る
+              </Button>
+            </Badge>
             <Dialog fullScreen open={isOpenTutorial}>
               <Tutorial
                 handleClose={() => this.setState({ isOpenTutorial: false })}
