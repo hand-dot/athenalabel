@@ -233,6 +233,14 @@ class TemplateEditor extends Component {
     fileReader.readAsDataURL(files[0]);
   }
 
+  removeImage() {
+    this.imageInput.value = '';
+    this.setState({ image: null });
+    if (this.hotInstance) {
+      refleshPdf(util.getNotEmptyRowData(this.hotInstance.getSourceData(), dataSchema), null);
+    }
+  }
+
   handleChangeTemplate(event) {
     const files = event.target.files; // eslint-disable-line
     const fileReader = new FileReader();
@@ -261,9 +269,9 @@ class TemplateEditor extends Component {
     const { templateName, templateDescription } = this.state;
     return (
       <Grid container justify="space-between">
-        <Grid item xs={6}>
+        <Grid item>
           <TextField
-            style={{ margin: 10 }}
+            style={{ margin: '10px 10px 10px 0' }}
             label="templateName"
             value={templateName}
             onChange={this.handleChangeTemplateName.bind(this)}
@@ -272,7 +280,7 @@ class TemplateEditor extends Component {
           />
           <TextField
             fullWidth
-            style={{ margin: 10 }}
+            style={{ margin: '10px 10px 10px 0' }}
             label="templateDescription"
             value={templateDescription}
             onChange={this.handleChangeTemplateDescription.bind(this)}
@@ -293,45 +301,40 @@ class TemplateEditor extends Component {
                 id="image"
                 type="file"
                 accept="image/*"
-                ref={(node) => {
-                  this.fileInput = node;
-                }}
+                ref={(node) => { this.imageInput = node; }}
                 onChange={this.handleChangeImage.bind(this)}
               />
             </label>
+            <button
+              type="button"
+              onClick={this.removeImage.bind(this)}
+            >
+              x
+            </button>
+            <div>/</div>
             <label htmlFor="importTemplate">
               Load:
               <input
                 id="importTemplate"
                 type="file"
                 accept="application/json"
-                ref={(node) => {
-                  this.fileInput = node;
-                }}
                 onChange={this.handleChangeTemplate.bind(this)}
               />
             </label>
+            <div>/</div>
             <button
               type="button"
-              onClick={() => {
-                downloadTemplate(templateName, templateDescription);
-              }}
+              onClick={() => { downloadTemplate(templateName, templateDescription); }}
             >
               Download
             </button>
           </div>
-          <div
-            ref={(node) => {
-              this.hotDom = node;
-            }}
-          />
+          <div ref={(node) => { this.hotDom = node; }} />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item>
           <iframe
             style={{ position: 'fixed', right: 0, border: '1px solid #ccc' }}
-            ref={(node) => {
-              this.iframe = node;
-            }}
+            ref={(node) => { this.iframe = node; }}
             height={`${window.innerHeight
               - (this.iframe
                 ? this.iframe.getBoundingClientRect().top + 5
