@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="theme-color" content="#000000">
+  <meta property="og:title" content="無料ですぐに使える宛名ラベル作成サイト - AthenaLabel" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://athenalabel.com/" />
+  <meta property="og:image" content="https://athenalabel.com/ogimage.png" />
+  <meta property="og:site_name" content="無料ですぐに使える宛名ラベル作成サイト - AthenaLabel" />
+  <meta property="og:description" content="AthenaLabelは無料ですぐに使える宛名ラベル作成サイトです。会員登録、データのアップロード必要なし!Excelライクにブラウザでそのまま宛名ラベルを作成できます。" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@labelmake" />
+  <meta name="twitter:domain" content="labelmake" />
+  <meta name="twitter:title" content="無料ですぐに使える宛名ラベル作成サイト - AthenaLabel" />
+  <meta name="twitter:description" content="AthenaLabelは無料ですぐに使える宛名ラベル作成サイトです。会員登録、データのアップロード必要なし!Excelライクにブラウザでそのまま宛名ラベルを作成できます。" />
+  <meta name="twitter:image" content="https://athenalabel.com/ogimage.png" />
+  <meta itemprop="image" content="https://athenalabel.com/ogimage.png" />
+
+  <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+  <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+  <title>無料ですぐに使える宛名ラベル作成サイト - AthenaLabel</title>
+  <meta name="description" content="AthenaLabelは無料ですぐに使える宛名ラベル作成サイトです。会員登録、データのアップロード必要なし!Excelライクにブラウザでそのまま宛名ラベルを作成できます。">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-xxx"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-xxx');
+  </script>
+  <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
+  <script>
+    // @see https://docs.headwayapp.co/widget for more configuration options.
+    var HW_config = {
+      selector: '#changelog', // CSS selector where to inject the badge
+      account: 'xxx'
+    }
+  </script>
+  <script async src="https://cdn.headwayapp.co/widget.js"></script>
+  <!-- Hotjar Tracking Code for https://athenalabel.com -->
+  <script>
+    (function (h, o, t, j, a, r) {
+      h.hj = h.hj || function () {
+        (h.hj.q = h.hj.q || []).push(arguments)
+      };
+      h._hjSettings = {
+        hjid: 0,
+        hjsv: 0
+      };
+      a = o.getElementsByTagName('head')[0];
+      r = o.createElement('script');
+      r.async = 1;
+      r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+      a.appendChild(r);
+    })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+  </script>
+  <script src="https://browser.sentry-cdn.com/4.2.4/bundle.min.js" crossorigin="anonymous"></script>
+  <script>
+    if ('%NODE_ENV%' !== 'development') {
+      Sentry.init({
+        dsn: 'https://xxx@sentry.io/xxx'
+      });
+    }
+  </script>
+</head>
+
+<body style="margin:0;">
+  <noscript>
+    You need to enable JavaScript to run this app.
+  </noscript>
+  <div id="root">Loading...</div>
+  <script defer src="./pdfmake/pdfmake.min.js"></script>
+  <script defer src="./pdfmake/vfs_fonts.js"></script>
+  <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+</body>
+
+</html>
